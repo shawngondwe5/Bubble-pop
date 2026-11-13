@@ -1,0 +1,6 @@
+{
+  "name": "Bubble Pop",
+  "description": "Vibrant casual bubble pop game with farm adventure aesthetics, combo bursts, multiple game modes, and local high scores.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

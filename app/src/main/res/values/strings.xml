@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Bubble Pop</string>
+    <string name="title_bubble_pop">Bubble Pop!</string>
+    <string name="subtitle_adventure">Farm Blast Edition</string>
+    <string name="play_button">PLAY</string>
+    <string name="mode_classic">Classic</string>
+    <string name="mode_classic_desc">60s Frenzy • Pop &amp; Combo</string>
+    <string name="mode_time_attack">Time Attack</string>
+    <string name="mode_time_attack_desc">30s Rush • 2x Points</string>
+    <string name="mode_endless">Endless</string>
+    <string name="mode_endless_desc">Zen Pop • Keep Flowing</string>
+    <string name="high_score_label">High Score</string>
+    <string name="score_label">Score</string>
+    <string name="best_label">Best</string>
+    <string name="time_label">Time</string>
+    <string name="combo_label">Combo</string>
+    <string name="paused_title">Game Paused</string>
+    <string name="resume_button">Resume</string>
+    <string name="restart_button">Restart</string>
+    <string name="home_button">Home</string>
+    <string name="game_over_title">Game Over!</string>
+    <string name="new_high_score_badge">NEW HIGH SCORE!</string>
+    <string name="bubbles_popped_stat">Bubbles Popped</string>
+    <string name="max_combo_stat">Max Combo</string>
+    <string name="accuracy_stat">Accuracy</string>
+    <string name="play_again_button">Play Again</string>
+    <string name="settings_title">Settings</string>
+    <string name="sound_effects_toggle">Sound Effects</string>
+    <string name="music_toggle">Game Music</string>
+    <string name="vibration_toggle">Vibration Haptics</string>
+    <string name="stats_title">Game Statistics</string>
+    <string name="total_bubbles_stat">Total Popped</string>
+    <string name="total_games_stat">Total Games Played</string>
+    <string name="reset_stats_button">Reset Stats</string>
+</resources>
