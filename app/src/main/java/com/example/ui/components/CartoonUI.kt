@@ -40,6 +40,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -271,13 +275,14 @@ fun MascotWidget(
 }
 
 /**
- * Wooden Pedestal and Ship-Wheel cannon launcher matching the reference image.
- * Holds the current shooting bubble and shows remaining shots badge ("20").
+ * Directional cartoon cannon launcher. The barrel follows the player's aim,
+ * while the loaded bubble, wooden carriage and shot counter stay visible.
  */
 @Composable
 fun WoodWheelPedestal(
     currentBubble: BubbleColor,
     shotsRemaining: Int,
+    aimAngle: Float = -90f,
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -285,47 +290,78 @@ fun WoodWheelPedestal(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        // Pedestal Wheel Frame
-        Box(
+        Canvas(
             modifier = Modifier
-                .size(86.dp)
-                .shadow(6.dp, CircleShape)
-                .clip(CircleShape)
-                .background(
-                    Brush.radialGradient(
-                        listOf(
-                            GameWoodBrown,
-                            GameWoodDark
-                        )
-                    )
-                )
-                .border(4.dp, GameGold, CircleShape)
-                .clickable { onClick() },
-            contentAlignment = Alignment.Center
+                .size(width = 112.dp, height = 108.dp)
+                .clickable { onClick() }
+                .testTag("cannon_barrel")
         ) {
-            Canvas(modifier = Modifier.size(54.dp)) {
+            val cx = size.width / 2f
+            val cy = size.height / 2f + 5.dp.toPx()
+            val barrelWidth = 34.dp.toPx()
+            val barrelLength = 62.dp.toPx()
+
+            // The barrel is drawn pointing straight up, then rotated to match
+            // the exact angle used by the projectile physics.
+            rotate(degrees = aimAngle + 90f, pivot = Offset(cx, cy)) {
+                drawRoundRect(
+                    color = GameWoodDark,
+                    topLeft = Offset(cx - barrelWidth / 2f, cy - barrelLength),
+                    size = Size(barrelWidth, barrelLength + 12.dp.toPx()),
+                    cornerRadius = CornerRadius(13.dp.toPx())
+                )
+                drawRoundRect(
+                    brush = Brush.verticalGradient(
+                        listOf(Color(0xFFFFD180), GameWoodBrown, Color(0xFF6D4C41))
+                    ),
+                    topLeft = Offset(cx - barrelWidth / 2f + 4.dp.toPx(), cy - barrelLength + 4.dp.toPx()),
+                    size = Size(barrelWidth - 8.dp.toPx(), barrelLength),
+                    cornerRadius = CornerRadius(10.dp.toPx())
+                )
+                // Gold muzzle ring
+                drawRoundRect(
+                    color = GameGold,
+                    topLeft = Offset(cx - barrelWidth / 2f - 2.dp.toPx(), cy - barrelLength - 2.dp.toPx()),
+                    size = Size(barrelWidth + 4.dp.toPx(), 13.dp.toPx()),
+                    cornerRadius = CornerRadius(7.dp.toPx())
+                )
+                drawRoundRect(
+                    color = GameWoodDark,
+                    topLeft = Offset(cx - barrelWidth / 2f + 3.dp.toPx(), cy - barrelLength + 1.dp.toPx()),
+                    size = Size(barrelWidth - 6.dp.toPx(), 7.dp.toPx()),
+                    cornerRadius = CornerRadius(4.dp.toPx())
+                )
+                // Current bubble visibly loaded inside the cannon mouth
                 drawGlossyBubbleByColor(
                     color = currentBubble,
-                    centerX = size.width / 2f,
-                    centerY = size.height / 2f,
-                    radiusPx = size.width / 2f
+                    centerX = cx,
+                    centerY = cy - barrelLength + 23.dp.toPx(),
+                    radiusPx = 12.dp.toPx()
                 )
             }
+
+            // Fixed wooden carriage and gold pivot
+            drawCircle(color = GameWoodDark, radius = 31.dp.toPx(), center = Offset(cx, cy + 18.dp.toPx()))
+            drawCircle(color = GameGold, radius = 26.dp.toPx(), center = Offset(cx, cy + 18.dp.toPx()))
+            drawCircle(
+                brush = Brush.radialGradient(listOf(Color(0xFFD7A45B), GameWoodBrown, GameWoodDark)),
+                radius = 22.dp.toPx(),
+                center = Offset(cx, cy + 18.dp.toPx())
+            )
+            drawCircle(color = Color(0xFFFFE0A3), radius = 5.dp.toPx(), center = Offset(cx, cy + 18.dp.toPx()))
+            drawCircle(color = GameGold, radius = 2.5.dp.toPx(), center = Offset(cx - 17.dp.toPx(), cy + 18.dp.toPx()))
+            drawCircle(color = GameGold, radius = 2.5.dp.toPx(), center = Offset(cx + 17.dp.toPx(), cy + 18.dp.toPx()))
         }
 
-        // Glowing Counter Badge ("20")
+        // Shot counter remains separate from the moving barrel.
         Box(
             modifier = Modifier
-                .offset(y = (-14).dp)
+                .offset(y = (-9).dp)
                 .shadow(4.dp, RoundedCornerShape(12.dp))
                 .clip(RoundedCornerShape(12.dp))
                 .background(
                     Brush.verticalGradient(
-                        listOf(
-                            Color(0xFFFFE082),
-                            GameGold,
-                            Color(0xFFFF8F00)
-                        )
+                        listOf(Color(0xFFFFE082), GameGold, Color(0xFFFF8F00))
                     )
                 )
                 .border(2.dp, GameWoodDark, RoundedCornerShape(12.dp))
