@@ -219,11 +219,13 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getHexCenter(coord: HexCoord): Offset {
-        val r = coord.row + _uiState.value.ceilingRowOffset
+        val visualRow = coord.row + _uiState.value.ceilingRowOffset
         val col = coord.col
         val rowHeight = bubbleRadius * sqrt(3f)
-        val y = bubbleRadius + r * rowHeight
-        val x = if (r % 2 == 0) {
+        // The ceiling offset moves the board down, but must not change the
+        // row's honeycomb alignment or its logical neighbour relationships.
+        val y = bubbleRadius + visualRow * rowHeight
+        val x = if (coord.row % 2 == 0) {
             bubbleRadius + col * 2f * bubbleRadius
         } else {
             2f * bubbleRadius + col * 2f * bubbleRadius
@@ -469,7 +471,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         for (coord in candidateCoords) {
-            val maxCol = if ((coord.row + state.ceilingRowOffset) % 2 == 0) colsEven else colsOdd
+            val maxCol = if (coord.row % 2 == 0) colsEven else colsOdd
             if (coord.row >= 0 && coord.col in 0 until maxCol && !grid.containsKey(coord)) {
                 val center = getHexCenter(coord)
                 val dist = hypot(projX - center.x, projY - center.y)
