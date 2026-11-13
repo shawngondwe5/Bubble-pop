@@ -55,6 +55,7 @@ fun GameplayScreen(
     combo: Int,
     currentBubble: BubbleColor,
     nextBubble: BubbleColor,
+    aimAngle: Float,
     grid: Map<HexCoord, GridBubble>,
     projectile: Projectile?,
     aimTrajectory: List<Offset>,
@@ -161,7 +162,7 @@ fun GameplayScreen(
                 }
             }
 
-            // Bottom Area: Next Bubble Slot, Ship-Wheel Cannon, Hen Mascot, Purple Ribbon
+            // Bottom Area: Next Bubble Slot, Directional Cannon, Hen Mascot, Purple Ribbon
             Column(modifier = Modifier.fillMaxWidth()) {
                 Row(
                     modifier = Modifier
@@ -177,10 +178,11 @@ fun GameplayScreen(
                         modifier = Modifier.testTag("switch_bubble_button")
                     )
 
-                    // Center: Ship-Wheel Cannon with current bubble and shots badge
+                    // Center: Directional cannon with the loaded bubble and shots badge
                     WoodWheelPedestal(
                         currentBubble = currentBubble,
                         shotsRemaining = shotsRemaining,
+                        aimAngle = aimAngle,
                         onClick = onSwitchBubbles,
                         modifier = Modifier.testTag("cannon_launcher")
                     )
